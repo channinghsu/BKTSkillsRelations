@@ -20,8 +20,8 @@ public class computeSkillsRelations {
     public int fold = 0;
     public int curstudent_ = 0;
     public boolean pstc = true;
-    public Map<String, Double> top = new HashMap<String, Double>();
-    public Map<String, Double> top_ptsc = new HashMap<String, Double>();
+    public Map<String, Double> top = new HashMap<>();
+    public Map<String, Double> top_ptsc = new HashMap<>();
 
     public final double stepSize = 0.05;
     public final double minVal = 0.000001;
@@ -76,9 +76,9 @@ public class computeSkillsRelations {
         double SSR = 0.0;
         String prevstudent = "FWORPLEJOHN";
         double prevL = 0.0;
-        double likelihoodcorrect = 0.0;
-        double prevLgivenresult = 0.0;
-        double newL = 0.0;
+        double likelihoodcorrect;
+        double prevLgivenresult;
+        double newL;
         curstudent_ = 0;
         Integer count = 0;
 
@@ -120,13 +120,13 @@ public class computeSkillsRelations {
         double SSR = 0.0;
         String prevstudent = "FWORPLEJOHN";
         double prevL = 0.0;
-        double likelihoodcorrect = 0.0;
-        double prevLgivenresult = 0.0;
-        double newL = 0.0;
-        double plnstar = 0.0;
-        int j = 0;
+        double likelihoodcorrect;
+        double prevLgivenresult;
+        double newL;
+        double plnstar;
+        int j;
         curstudent_ = 0;
-        boolean newstudentflag = false;
+        boolean newstudentflag;
         Integer count = 0;
         for (int i = start, sum = 0; i <= end; i++, sum++) {
             //System.out.println(SSR);
@@ -541,7 +541,8 @@ public class computeSkillsRelations {
     }
 
     public static void main(String[] args) {
-        String infile_ = "data/as_ptsc.tsv";
+//        String infile_ = "data/as_ptsc.tsv";
+        String infile_ = "data/student-problem-middle.tsv";
         computeSkillsRelations c = new computeSkillsRelations();
         c.computelzerot(infile_);
     }
