@@ -154,6 +154,7 @@ public class computeSkillsRelations {
                     } else if (newstudentflag) {
                         plnstar = likelihoodcorrect;
                     } else {
+                        // 第二个观测起，源知识点开始影响当前知识点
                         plnstar = likelihoodcorrect + ((1.0 - likelihoodcorrect) * lnsigma_[j] * params.K);
                     }
 
@@ -172,17 +173,17 @@ public class computeSkillsRelations {
                     likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
                     likelihoodcorrect = prevL + ((1.0 - prevL) * params.T);
 
-                    j = i - start + skillends_[sourceskill] - sourceSkillNum[sourceskill]; //must be adjusted for the number of observations (N - 1)
+                    j = i - start + skillends_[sourceskill] - sourceSkillNum[sourceskill];
 
-                    // 若当前知识点的答题序列大于源知识点的序列
+                    // 如果源知识点的观测序列长度小于当前知识点的序列长度
                     if (sourceSkillNum[sourceskill] < sum) {
-                        break;// 不再估计当前知识点的参数
+                        break; // 不再估计当前知识点的参数
                     } else if (newstudentflag) {
                         plnstar = likelihoodcorrect;
                     } else {
+                        // 从第二次观测开始，源知识点开始影响当前知识点
                         plnstar = likelihoodcorrect + ((1.0 - likelihoodcorrect) * lnsigma_[j] * params.K);
                     }
-
 
                     likelihoodcorrect = plnstar;
                 }
