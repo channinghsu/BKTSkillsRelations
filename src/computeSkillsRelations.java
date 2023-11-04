@@ -93,7 +93,8 @@ public class computeSkillsRelations {
                 else likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
                 SSR += (right_[i] - likelihoodcorrect) * (right_[i] - likelihoodcorrect);
                 count++;
-                prevLgivenresult = (right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G)))) + ((1.0 - right_[i]) * ((prevL * (params.S)) / ((prevL * (params.S)) + ((1.0 - prevL) * (1.0 - params.G))))));
+                prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
+                prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
 
                 newL = prevLgivenresult + (1.0 - prevLgivenresult) * params.T;
                 prevL = newL;
@@ -107,8 +108,8 @@ public class computeSkillsRelations {
                     lnsigma_[i] = likelihoodcorrect;
                 }
 
-                prevLgivenresult = (right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G)))) + ((1.0 - right_[i]) * ((prevL * (params.S)) / ((prevL * (params.S)) + ((1.0 - prevL) * (1.0 - params.G))))));
-
+                prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
+                prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
                 newL = prevLgivenresult + (1.0 - prevLgivenresult) * params.T;
                 prevL = newL;
             }
@@ -146,8 +147,8 @@ public class computeSkillsRelations {
                 else {
                     likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
                     likelihoodcorrect = prevL + ((1.0 - prevL) * params.T);
-
-                    j = i - start + skillends_[sourceskill] - sourceSkillNum[sourceskill]; //must be adjusted for the number of observations (N - 1)
+                    //must be adjusted for the number of observations (N - 1)
+                    j = i - start + skillends_[sourceskill] - sourceSkillNum[sourceskill];
                     // 若当前知识点的答题序列大于源知识点的序列
                     if (sourceSkillNum[sourceskill] < sum) {
                         break;// 不再估计当前知识点的参数
@@ -162,7 +163,9 @@ public class computeSkillsRelations {
                 }
                 SSR += (right_[i] - likelihoodcorrect) * (right_[i] - likelihoodcorrect);
                 count++;
-                prevLgivenresult = (right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G)))) + ((1.0 - right_[i]) * ((prevL * (params.S)) / ((prevL * (params.S)) + ((1.0 - prevL) * (1.0 - params.G))))));
+
+                prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
+                prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
 
                 newL = prevLgivenresult + (1.0 - prevLgivenresult) * params.T;
                 prevL = newL;
@@ -189,7 +192,8 @@ public class computeSkillsRelations {
                 }
                 SSR += (right_[i] - likelihoodcorrect) * (right_[i] - likelihoodcorrect);
                 count++;
-                prevLgivenresult = (right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G)))) + ((1.0 - right_[i]) * ((prevL * (params.S)) / ((prevL * (params.S)) + ((1.0 - prevL) * (1.0 - params.G))))));
+                prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
+                prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
 
                 newL = prevLgivenresult + (1.0 - prevLgivenresult) * params.T;
                 prevL = newL;
@@ -270,6 +274,7 @@ public class computeSkillsRelations {
 
             tt = st_.nextToken();
             tt = st_.nextToken();
+
             tt = st_.nextToken();
             tt = st_.nextToken();
             tt = st_.nextToken();
@@ -439,6 +444,9 @@ public class computeSkillsRelations {
                     }
                     int endact = skillends_[curskill];
 
+                    // Get the initial RMSE.
+                    oldRMSE = findGOOFpstc(startact, endact, oldParams, false, sourceskill);
+
                     for (Integer i = 0; i < totalSteps; i++) {
                         // Take a random step.
                         BKTParams_ptsc newParams = new BKTParams_ptsc(oldParams, true);
@@ -449,9 +457,10 @@ public class computeSkillsRelations {
                             oldParams = new BKTParams_ptsc(newParams);
                             oldRMSE = newRMSE;
                         }
-
-                        if (newRMSE < bestRMSE) {                            // This method allows the RMSE to increase, but we're interested
-                            bestParams = new BKTParams_ptsc(newParams);    // in the global minimum, so save the minimum values as the "best."
+                        // This method allows the RMSE to increase, but we're interested
+                        if (newRMSE < bestRMSE) {
+                            // in the global minimum, so save the minimum values as the "best."
+                            bestParams = new BKTParams_ptsc(newParams);
                             bestRMSE = newRMSE;
                         }
 
@@ -524,6 +533,7 @@ public class computeSkillsRelations {
         for (int i = 1; i <= skillnum; i++) {
             sourceSkillNum[j++] = skillends_[i] - skillends_[i - 1];
         }
+
         System.out.println("skill\tL0\tG\tS\tT\teol");
         for (int curskill = 0; curskill <= skillnum; curskill++) {
             for (fold = 0; fold < 4; fold++) {
@@ -538,7 +548,6 @@ public class computeSkillsRelations {
                 }
             }
         }
-
     }
 
     public static void main(String[] args) {
