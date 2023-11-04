@@ -11,7 +11,8 @@
    原始代码：
 
    ```java
-   j = i - start + sourceskillend - 804 - 1; // j 为源知识点的第（当前观测 - 1）个观测，其中804 - 1为源知识点的观测序列长度
+   // j 为源知识点的第（当前观测 - 1）个观测，其中804 - 1为源知识点的观测序列长度
+   j = i - start + sourceskillend - 804 - 1; 
    
    if (newstudentflag) 
        plnstar = likelihoodcorrect;
