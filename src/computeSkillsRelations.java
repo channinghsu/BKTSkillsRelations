@@ -107,6 +107,21 @@ public class computeSkillsRelations {
                 if (storelnsigma) {
                     lnsigma_[i] = likelihoodcorrect;
                 }
+                System.out.print("Non-PSTC");
+                System.out.print(",");
+                System.out.print(fold);
+                System.out.print(",");
+                System.out.print("blank"); //In PSTC output, this column reflects the source skill
+                System.out.print(",");
+                System.out.print(skill_[i]);
+                System.out.print(",");
+                System.out.print(students_[i]);
+                System.out.print(",");
+                System.out.print(right_[i]);
+                System.out.print(",");
+                System.out.print("blank"); //In PSTC output, this columnn reflects the P(Ln) used for PSTC component
+                System.out.print(",");
+                System.out.println(likelihoodcorrect);
 
                 prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
                 prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
@@ -125,7 +140,7 @@ public class computeSkillsRelations {
         double prevLgivenresult;
         double newL;
         double plnstar;
-        int j;
+        int j = 0;
         curstudent_ = 0;
         boolean newstudentflag;
         Integer count = 0;
@@ -192,6 +207,23 @@ public class computeSkillsRelations {
                 }
                 SSR += (right_[i] - likelihoodcorrect) * (right_[i] - likelihoodcorrect);
                 count++;
+
+                System.out.print("PSTC");
+				System.out.print(",");
+				System.out.print(fold);
+				System.out.print(",");
+				System.out.print(sourceskill);
+				System.out.print(",");
+				System.out.print(skill_[i]);
+				System.out.print(",");
+				System.out.print(students_[i]);
+				System.out.print(",");
+				System.out.print(right_[i]);
+				System.out.print(",");
+				if(j < 0){System.out.print("skip");}else{System.out.print(lnsigma_[j]);}
+				System.out.print(",");
+				System.out.println(likelihoodcorrect);
+
                 prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
                 prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
 
@@ -551,8 +583,9 @@ public class computeSkillsRelations {
     }
 
     public static void main(String[] args) {
-//        String infile_ = "data/as_ptsc.tsv";
-        String infile_ = "data/student-problem-middle.tsv";
+//              String infile_ = "data/as_ptsc.tsv";
+        String infile_ = "data/ct.tsv";
+//        String infile_ = "data/student-problem-middle.tsv";
         computeSkillsRelations c = new computeSkillsRelations();
         c.computelzerot(infile_);
     }
