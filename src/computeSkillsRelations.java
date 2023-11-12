@@ -9,7 +9,7 @@ public class computeSkillsRelations {
     public String[] students_ = new String[2760000];// Number of instances
     public String[] skill_ = new String[2760000];
     public double[] right_ = new double[2760000];
-    public int[] skillends_ = new int[111];//Number of Skills
+    public int[] skillends_ = new int[111];// Number of Skills
     public double[] lnsigma_ = new double[2760000];
     public int skillnum = -1;
     public int[] sourceSkillNum = new int[111];// the number of current source skill
@@ -72,7 +72,8 @@ public class computeSkillsRelations {
         }
     }
 
-    public double findGOOF(int start, int end, BKTParams params, boolean give_preds, boolean storelnsigma, int sourceskillnum) {
+    public double findGOOF(int start, int end, BKTParams params, boolean give_preds, boolean storelnsigma,
+            int sourceskillnum) {
         double SSR = 0.0;
         String prevstudent = "FWORPLEJOHN";
         double prevL = 0.0;
@@ -89,19 +90,27 @@ public class computeSkillsRelations {
                 curstudent_++;
             }
             if ((!cv) || ((curstudent_ % 4 != fold) && !give_preds)) {
-                if (lnminus1_estimation) likelihoodcorrect = prevL;
-                else likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
+                if (lnminus1_estimation) {
+                    likelihoodcorrect = prevL;
+                } else {
+                    likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
+                }
                 SSR += (right_[i] - likelihoodcorrect) * (right_[i] - likelihoodcorrect);
                 count++;
-                prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
-                prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
+                prevLgivenresult = right_[i]
+                        * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
+                prevLgivenresult += (1 - right_[i])
+                        * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
 
                 newL = prevLgivenresult + (1.0 - prevLgivenresult) * params.T;
                 prevL = newL;
             }
             if ((!cv) || ((curstudent_ % 4 == fold) && give_preds)) {
-                if (lnminus1_estimation) likelihoodcorrect = prevL;
-                else likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
+                if (lnminus1_estimation) {
+                    likelihoodcorrect = prevL;
+                } else {
+                    likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
+                }
                 SSR += (right_[i] - likelihoodcorrect) * (right_[i] - likelihoodcorrect);
                 count++;
                 if (storelnsigma) {
@@ -111,7 +120,7 @@ public class computeSkillsRelations {
                 System.out.print(",");
                 System.out.print(fold);
                 System.out.print(",");
-                System.out.print("blank"); //In PSTC output, this column reflects the source skill
+                System.out.print("blank"); // In PSTC output, this column reflects the source skill
                 System.out.print(",");
                 System.out.print(skill_[i]);
                 System.out.print(",");
@@ -119,12 +128,14 @@ public class computeSkillsRelations {
                 System.out.print(",");
                 System.out.print(right_[i]);
                 System.out.print(",");
-                System.out.print("blank"); //In PSTC output, this columnn reflects the P(Ln) used for PSTC component
+                System.out.print("blank"); // In PSTC output, this columnn reflects the P(Ln) used for PSTC component
                 System.out.print(",");
                 System.out.println(likelihoodcorrect);
 
-                prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
-                prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
+                prevLgivenresult = right_[i]
+                        * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
+                prevLgivenresult += (1 - right_[i])
+                        * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
                 newL = prevLgivenresult + (1.0 - prevLgivenresult) * params.T;
                 prevL = newL;
             }
@@ -145,12 +156,12 @@ public class computeSkillsRelations {
         boolean newstudentflag;
         Integer count = 0;
         for (int i = start, sum = 0; i <= end; i++, sum++) {
-            //System.out.println(SSR);
-            //System.out.println(students_[i]);
+            // System.out.println(SSR);
+            // System.out.println(students_[i]);
             newstudentflag = false;
 
             if (!students_[i].equals(prevstudent)) {
-                //System.out.println(students_[i]);
+                // System.out.println(students_[i]);
                 prevL = params.L0;
                 prevstudent = students_[i];
                 curstudent_++;
@@ -158,11 +169,12 @@ public class computeSkillsRelations {
             }
 
             if ((!cv) || ((curstudent_ % 4 != fold) && !give_preds)) {
-                if (lnminus1_estimation) likelihoodcorrect = prevL;
+                if (lnminus1_estimation)
+                    likelihoodcorrect = prevL;
                 else {
                     likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
                     likelihoodcorrect = prevL + ((1.0 - prevL) * params.T);
-                    //must be adjusted for the number of observations (N - 1)
+                    // must be adjusted for the number of observations (N - 1)
                     j = i - start + skillends_[sourceskill] - sourceSkillNum[sourceskill];
                     // 若当前知识点的答题序列大于源知识点的序列
                     if (sourceSkillNum[sourceskill] < sum) {
@@ -186,7 +198,8 @@ public class computeSkillsRelations {
                 prevL = newL;
             }
             if ((!cv) || ((curstudent_ % 4 == fold) && give_preds)) {
-                if (lnminus1_estimation) likelihoodcorrect = prevL;
+                if (lnminus1_estimation)
+                    likelihoodcorrect = prevL;
                 else {
                     likelihoodcorrect = (prevL * (1.0 - params.S)) + ((1.0 - prevL) * params.G);
                     likelihoodcorrect = prevL + ((1.0 - prevL) * params.T);
@@ -209,20 +222,24 @@ public class computeSkillsRelations {
                 count++;
 
                 System.out.print("PSTC");
-				System.out.print(",");
-				System.out.print(fold);
-				System.out.print(",");
-				System.out.print(sourceskill);
-				System.out.print(",");
-				System.out.print(skill_[i]);
-				System.out.print(",");
-				System.out.print(students_[i]);
-				System.out.print(",");
-				System.out.print(right_[i]);
-				System.out.print(",");
-				if(j < 0){System.out.print("skip");}else{System.out.print(lnsigma_[j]);}
-				System.out.print(",");
-				System.out.println(likelihoodcorrect);
+                System.out.print(",");
+                System.out.print(fold);
+                System.out.print(",");
+                System.out.print(sourceskill);
+                System.out.print(",");
+                System.out.print(skill_[i]);
+                System.out.print(",");
+                System.out.print(students_[i]);
+                System.out.print(",");
+                System.out.print(right_[i]);
+                System.out.print(",");
+                if (j < 0) {
+                    System.out.print("skip");
+                } else {
+                    System.out.print(lnsigma_[j]);
+                }
+                System.out.print(",");
+                System.out.println(likelihoodcorrect);
 
                 prevLgivenresult = right_[i] * ((prevL * (1.0 - params.S)) / ((prevL * (1 - params.S)) + ((1.0 - prevL) * (params.G))));
                 prevLgivenresult += (1 - right_[i]) * ((prevL * params.S) / ((prevL * params.S) + ((1.0 - prevL) * (1.0 - params.G))));
@@ -233,7 +250,6 @@ public class computeSkillsRelations {
         }
         return Math.sqrt(SSR / count);
     }
-
 
     class BKTParams_ptsc {
         public double L0, G, S, T, K;
@@ -318,7 +334,8 @@ public class computeSkillsRelations {
 
                 if (tt == StreamTokenizer.TT_EOF) {
                     prevskill = skill_[actnum - 1];
-                    if (skillnum > -1) skillends_[skillnum] = actnum - 1;
+                    if (skillnum > -1)
+                        skillends_[skillnum] = actnum - 1;
                     break;
                 }
 
@@ -342,7 +359,8 @@ public class computeSkillsRelations {
                 actnum++;
                 if (!skill_[actnum - 1].equals(prevskill)) {
                     prevskill = skill_[actnum - 1];
-                    if (skillnum > -1) skillends_[skillnum] = actnum - 2;
+                    if (skillnum > -1)
+                        skillends_[skillnum] = actnum - 2;
                     skillnum++;
                 }
 
@@ -352,7 +370,6 @@ public class computeSkillsRelations {
             e.printStackTrace();
         }
     }
-
 
     public void fit_skill_model(int curskill, boolean howaboutpstc) {
         if (!howaboutpstc) {
@@ -389,7 +406,6 @@ public class computeSkillsRelations {
             }
             int endact = skillends_[curskill];
 
-
             // Get the initial RMSE.
             oldRMSE = findGOOF(startact, endact, oldParams, false, true, curskill);
 
@@ -399,18 +415,20 @@ public class computeSkillsRelations {
 
                 newRMSE = findGOOF(startact, endact, oldParams, false, true, curskill);
 
-                if (Math.random() <= Math.exp((oldRMSE - newRMSE) / temp)) {    // Accept (otherwise move is rejected)
+                if (Math.random() <= Math.exp((oldRMSE - newRMSE) / temp)) { // Accept (otherwise move is rejected)
                     oldParams = new BKTParams(newParams);
                     oldRMSE = newRMSE;
                 }
 
-                if (newRMSE < bestRMSE) {                            // This method allows the RMSE to increase, but we're interested
-                    bestParams = new BKTParams(newParams);    // in the global minimum, so save the minimum values as the "best."
+                if (newRMSE < bestRMSE) { // This method allows the RMSE to increase, but we're interested
+                    bestParams = new BKTParams(newParams); // in the global minimum, so save the minimum values as the
+                                                           // "best."
                     bestRMSE = newRMSE;
                 }
 
-                if (i % 10000 == 0 && i > 0) {            // Every 10,000 steps, decrease the "temperature."
-                    if (bestRMSE == prevBestRMSE) break;    // If the best estimate didn't change, we're done.
+                if (i % 10000 == 0 && i > 0) { // Every 10,000 steps, decrease the "temperature."
+                    if (bestRMSE == prevBestRMSE)
+                        break; // If the best estimate didn't change, we're done.
 
                     prevBestRMSE = bestRMSE;
                     temp = temp / 2.0;
@@ -423,7 +441,7 @@ public class computeSkillsRelations {
             System.out.print("\t");
             System.out.print(fold);
             System.out.print("\t");
-            System.out.print("blank"); //In PSTC output this column reflects the source skill
+            System.out.print("blank"); // In PSTC output this column reflects the source skill
             System.out.print("\t");
             System.out.print(curskill);
             System.out.print("\t");
@@ -435,7 +453,7 @@ public class computeSkillsRelations {
             System.out.print("\t");
             System.out.print(bestParams.T);
             System.out.print("\t");
-            System.out.print("blank"); //In PSTC output this column reflects the K-value
+            System.out.print("blank"); // In PSTC output this column reflects the K-value
             System.out.println("\teol");
         }
         if (howaboutpstc) {
@@ -451,7 +469,7 @@ public class computeSkillsRelations {
             if (bounded) {
                 top_ptsc.put("G", 0.3);
                 top_ptsc.put("S", 0.3);
-                //top_ptsc.put("K", 0.6);
+                // top_ptsc.put("K", 0.6);
             } else {
                 top_ptsc.put("G", 0.999999);
                 top_ptsc.put("S", 0.999999);
@@ -485,7 +503,8 @@ public class computeSkillsRelations {
 
                         newRMSE = findGOOFpstc(startact, endact, newParams, false, sourceskill);
 
-                        if (Math.random() <= Math.exp((oldRMSE - newRMSE) / temp)) {    // Accept (otherwise move is rejected)
+                        if (Math.random() <= Math.exp((oldRMSE - newRMSE) / temp)) { // Accept (otherwise move is
+                                                                                     // rejected)
                             oldParams = new BKTParams_ptsc(newParams);
                             oldRMSE = newRMSE;
                         }
@@ -496,8 +515,9 @@ public class computeSkillsRelations {
                             bestRMSE = newRMSE;
                         }
 
-                        if (i % 10000 == 0 && i > 0) {            // Every 10,000 steps, decrease the "temperature."
-                            if (bestRMSE == prevBestRMSE) break;    // If the best estimate didn't change, we're done.
+                        if (i % 10000 == 0 && i > 0) { // Every 10,000 steps, decrease the "temperature."
+                            if (bestRMSE == prevBestRMSE)
+                                break; // If the best estimate didn't change, we're done.
 
                             prevBestRMSE = bestRMSE;
                             temp = temp / 2.0;
@@ -583,12 +603,10 @@ public class computeSkillsRelations {
     }
 
     public static void main(String[] args) {
-//              String infile_ = "data/as_ptsc.tsv";
+        // String infile_ = "data/as_ptsc.tsv";
         String infile_ = "data/ct.tsv";
-//        String infile_ = "data/student-problem-middle.tsv";
+        // String infile_ = "data/student-problem-middle.tsv";
         computeSkillsRelations c = new computeSkillsRelations();
         c.computelzerot(infile_);
     }
 }
-
-
