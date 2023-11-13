@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="computeSkillsRelations" type="Application" factoryName="Application" nameIsGenerated="true">
+    <output_file path="$USER_HOME$/Desktop/Klog" is_save="true" />
+    <option name="MAIN_CLASS_NAME" value="computeSkillsRelations" />
+    <module name="BKTSkillsRelations" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
