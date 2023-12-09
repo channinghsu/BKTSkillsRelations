@@ -73,7 +73,7 @@ public class computeSkillsRelations {
     }
 
     public double findGOOF(int start, int end, BKTParams params, boolean give_preds, boolean storelnsigma,
-            int sourceskillnum) {
+                           int sourceskillnum) {
         double SSR = 0.0;
         String prevstudent = "FWORPLEJOHN";
         double prevL = 0.0;
@@ -426,7 +426,7 @@ public class computeSkillsRelations {
 
                 if (newRMSE < bestRMSE) { // This method allows the RMSE to increase, but we're interested
                     bestParams = new BKTParams(newParams); // in the global minimum, so save the minimum values as the
-                                                           // "best."
+                    // "best."
                     bestRMSE = newRMSE;
                 }
 
@@ -508,7 +508,7 @@ public class computeSkillsRelations {
                         newRMSE = findGOOFpstc(startact, endact, newParams, false, sourceskill);
 
                         if (Math.random() <= Math.exp((oldRMSE - newRMSE) / temp)) { // Accept (otherwise move is
-                                                                                     // rejected)
+                            // rejected)
                             oldParams = new BKTParams_ptsc(newParams);
                             oldRMSE = newRMSE;
                         }
@@ -528,12 +528,12 @@ public class computeSkillsRelations {
                         }
                     }
 
-                    System.out.print("Source skill = ");
-                    System.out.print(sourceskill);
-                    System.out.print(", ");
-                    System.out.print("Destination skill = ");
-                    System.out.print(curskill);
-                    System.out.println("\teol");
+//                    System.out.print("Source skill = ");
+//                    System.out.print(sourceskill);
+//                    System.out.print(", ");
+//                    System.out.print("Destination skill = ");
+//                    System.out.print(curskill);
+//                    System.out.println("\teol");
 
                     findGOOFpstc(startact, endact, bestParams, true, sourceskill);
 
@@ -607,9 +607,8 @@ public class computeSkillsRelations {
     }
 
     public static void main(String[] args) {
-//         String infile_ = "data/as_ptsc.tsv";
-//        String infile_ = "data/ct.tsv";
-         String infile_ = "data/student-problem-middle.tsv";
+        String infile_ = "data/ct_relation.tsv";
+//        String infile_ = "data/train_set.tsv";
         computeSkillsRelations c = new computeSkillsRelations();
         c.computelzerot(infile_);
     }

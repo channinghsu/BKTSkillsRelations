@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="computeSkillsRelations" type="Application" factoryName="Application" nameIsGenerated="true">
-    <output_file path="$USER_HOME$/Desktop/Klog" is_save="true" />
+  <configuration default="false" name="computeSkillsRelations" type="Application" factoryName="Application" nameIsGenerated="true" show_console_on_std_out="true">
+    <output_file path="$USER_HOME$/Desktop/BKT/BKT实验/Klog/skills.log" is_save="true" />
     <option name="MAIN_CLASS_NAME" value="computeSkillsRelations" />
     <module name="BKTSkillsRelations" />
     <method v="2">
